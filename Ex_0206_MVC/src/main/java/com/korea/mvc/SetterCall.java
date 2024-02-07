@@ -1,8 +1,12 @@
 package com.korea.mvc;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.springframework.util.StringUtils;
 
 public class SetterCall {
 	public static void main(String[] args) throws Exception{
@@ -34,8 +38,35 @@ public class SetterCall {
 			Class<?> type = ivArr[i].getType();
 			
 			Object value = map.get(name);
+			Method method = null;
+			
+			try {
+				// map에 필드와 일치하는 키가 있을 때만, sertter호출
+				if(value == null) continue;
+				
+				method = clazz.getDeclaredMethod(getSetterName(name),type);
+				System.out.println("method="+method);
+				method.invoke(obj, convertTo(value, type)); // obj의 setter를 호출
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
+		System.out.println(Arrays.toString(ivArr));
 		
-		return null;
+		return obj;
+	}
+
+	private static Object convertTo(Object value, Class<?> type) {
+		// value의 타입과 type의 타입이 같으면 그대로 반환
+		if(value ==null || type ==null || type.isInstance(value)) return value;
+		// Stinrg -> int 변환
+		if(String.class.isInstance(value) && type == int.class) return Integer.valueOf(""+value);
+			
+		return value;
+	}
+	
+	// 객체 변수 이름으로 setter의 이름을 만들어서 반환하는 메서드 (name -> setName)
+	private static String getSetterName(String name) {
+		return "set" +StringUtils.capitalize(name);
 	}
 }

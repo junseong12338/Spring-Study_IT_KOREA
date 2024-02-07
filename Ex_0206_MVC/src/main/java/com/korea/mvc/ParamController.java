@@ -39,4 +39,6 @@ public class ParamController {
 		return HomeClass.VIEW_PATH + "insert_result.jsp";
 	}
 	
+	
+	
 }
