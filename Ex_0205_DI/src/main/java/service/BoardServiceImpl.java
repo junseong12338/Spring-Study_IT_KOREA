@@ -19,4 +19,6 @@ public class BoardServiceImpl implements BoardService{
 		
 		return board_dao.selectList();
 	}
+	
+	
 }

@@ -5,6 +5,60 @@
 <head>
 <meta charset="UTF-8">
 <title>YoilTeller</title>
+
+<script type="text/javascript">
+	function send1(f) {
+		let name = f.name.value
+		let age = f.age.value
+		let tel = f.tel.value
+		
+		if(name == ''){
+			alert('이름을 입력하세요')
+			return;
+		}
+		
+		if(age == ''){
+			alert('나이를 입력하세요')
+			return;
+		}
+		
+		if(tel == ''){
+			alert('번호를 입력하세요')
+			return;
+		}
+		
+		f.action = 'insert1';
+		f.method = 'get';
+		f.submit();
+	}
+	
+	function send2(f) {
+		let name = f.name.value
+		let age = f.age.value
+		let tel = f.tel.value
+		
+		if(name == ''){
+			alert('이름을 입력하세요')
+			return;
+		}
+		
+		if(age == ''){
+			alert('나이를 입력하세요')
+			return;
+		}
+		
+		if(tel == ''){
+			alert('번호를 입력하세요')
+			return;
+		}
+		
+		f.action = 'insert2';
+		f.method = 'get';
+		f.submit();
+	}
+	
+	
+</script>
 </head>
 <body>
 	<form>

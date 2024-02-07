@@ -16,10 +16,6 @@ public class RootContext {
 		return new BoardDAOImpl();
 	}
 	
-	@Bean
-	public BoardServiceImpl boardServiceImpl(BoradDAO board_dao) {
-		
-		return new BoardServiceImpl(board_dao);
-	}
+
 	
 }
