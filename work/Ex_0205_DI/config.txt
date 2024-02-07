@@ -1,0 +1,2 @@
+car = com.korea.di.di2.Truck
+engine=com.korea.di.di2.Engine
