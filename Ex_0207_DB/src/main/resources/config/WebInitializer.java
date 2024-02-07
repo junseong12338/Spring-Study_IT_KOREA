@@ -5,6 +5,9 @@ import javax.servlet.Filter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import context.Context_1_mybatis;
+import context.Context_2_dao;
+
 public class WebInitializer extends AbstractAnnotationConfigDispatcherServletInitializer{
 	//AbstractAnnotationConfigDispatcherServletInitializer
 	//스프링에서 제공하는 클래스로 웹 어플리케이션의 초기화를 위한 편리한 방법을 제공한다.
@@ -19,7 +22,7 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
 		// TODO Auto-generated method stub
-		return new Class[] { RootContext.class };
+		return new Class[] { Context_1_mybatis.class,Context_2_dao.class };
 	}
 	// .class : 클래스 리터럴 클래스 그자체를 참조 하는 구문
 	
