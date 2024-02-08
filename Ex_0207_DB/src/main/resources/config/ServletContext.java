@@ -1,10 +1,17 @@
 package config;
 
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import com.korea.db.DeptController;
+import com.korea.db.SawonController;
+
+import dao.DeptDAO;
+import dao.SawonDAO;
 
 
 @Configuration
@@ -17,13 +24,16 @@ public class ServletContext implements WebMvcConfigurer {
 		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
 	}
 	
-//	@Bean
-//	public InternalResourceViewResolver  resolver() {
-//		InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-//		resolver.setViewClass(JstlView.class);
-//		resolver.setPrefix("/WEB-INF/views/");
-//		resolver.setSuffix(".jsp");
-//		return resolver;
-//	}
+
+	
+	@Bean
+	public DeptController deptController(DeptDAO dao) {
+		return new DeptController(dao);
+	}
+	
+	@Bean
+	public SawonController sawonController(SawonDAO dao) {
+		return new SawonController(dao);
+	}
 	
 }

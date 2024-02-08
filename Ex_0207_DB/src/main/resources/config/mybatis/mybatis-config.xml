@@ -9,10 +9,15 @@
 	</settings>
 	
 	<typeAliases>
-		<!-- <typeAlias type="vo.DeptVo" alias="dept"/> -->
+		 <typeAlias type="dto.SawonDTO" alias="sawon"/> 
+		 <typeAlias type="dto.DeptDTO" alias="dept"/> 
 	</typeAliases>
 	
+
+	
 	<mappers>
-		<!-- <mapper resource="config/mybatis/mapper/dept.xml" />-->
+	<mapper resource="config/mybatis/mapper/dept.xml" />
+	<mapper resource="config/mybatis/mapper/sawon.xml" />
 	</mappers>
+	
 </configuration>
