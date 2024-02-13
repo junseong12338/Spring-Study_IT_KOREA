@@ -8,6 +8,61 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" href ="resources/css/visit.css">
+<script src="${pageContext.request.contextPath}/resources/js/httpRequest.js"></script>
+<script>
+	function del(f){
+		let idx = f.idx.value;
+		let pwd = f.pwd.value;
+		if(pwd ==''){
+			alert("비밀번호를 입력하세요")
+			return;
+		}
+		
+		if(!confirm("삭제하시겠습니까?")){
+			return;
+		}
+		
+		var url = "delete";
+		var param = "idx="+idx+"&pwd="+encodeURIComponent(pwd);
+		
+		sendRequest(url,param,resultFn,'GET');
+	}
+	
+	function resultFn(){
+		if(xhr.readyState == 4 && xhr.status== 200){
+			var data = xhr.responseText;
+			var json = (new Function('return'+data))();
+			
+			
+			if(json[0].res == 'no'){
+				alert("삭제실패");
+				return;
+			} 
+				alert("삭제성공");
+				location.href="list";
+		}
+	}
+
+	
+	function modify(f){
+		let ori_pwd = f.ori_pwd.value;
+		let pwd = f.pwd.value;
+		if(pwd != ori_pwd){
+			alert("비밀번호 불일치")
+			return;
+		}
+		
+		if(!confirm("수정하시겠습니까?")){
+			return;
+		}
+		
+
+		f.action = "modify_form";
+		f.method = "post";
+		f.submit();
+	}
+</script>
+
 </head>
 <body>
 	<div id="main_box">
@@ -17,18 +72,21 @@
 	
 	<c:forEach var="dto" items="${list}">
 		<div class="visit_box">
-		<div class="type_content"><pre>${dto.content}</pre></div>
-		<div class="type_name">작성자 : ${dto.name}(${dto.ip})</div>
-		<div class="type_regdate">작성일 ${dto.regdate }</div>
-		<div>	
+			<div class="type_content"><pre>${dto.content}</pre></div>
+			<div class="type_name">작성자 : ${dto.name}(${dto.ip})</div>
+			<div class="type_regdate">작성일 ${dto.regdate }</div>
+			<div>	
+			
 		<form>
-			<input type="hidden" name="idx" value="${vo.idx }">
+			<input type="hidden" name="idx" value="${dto.idx }">
+			<input type="hidden" name="ori_pwd" value="${dto.pwd }">
+			
 			비밀번호 <input type="password" name = "pwd">
 			<input type="button" value="수정" onclick="modify(this.form)">
 			<input type="button" value="삭제" onclick="del(this.form)">
 		</form>
-
-		</div>
+	
+			</div>
 		</div>
 
 	</c:forEach>

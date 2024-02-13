@@ -7,6 +7,14 @@
 <title>Insert title here</title>
 <script>
 	function send(f){
+		
+		let pwd = f.pwd.value;
+		if(pwd ==''){
+			alert("비밀번호를 입력하세요")
+			return;
+		}
+		
+		
 		f.action="insert";
 		f.method ="post";
 		f.submit();
@@ -36,7 +44,7 @@
 			<tr>
 				<td colspan="2" align="center">
 				<input type="button" value="등록하기" onclick="send(this.form);">
-				<input type="button" value="목록으로" onclick="location.href='visit_list'">
+				<input type="button" value="목록으로" onclick="location.href='list'">
 			</td>
 			</tr>
 		
