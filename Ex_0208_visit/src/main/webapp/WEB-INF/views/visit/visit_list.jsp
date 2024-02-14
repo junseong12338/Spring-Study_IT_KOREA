@@ -72,9 +72,13 @@
 	
 	<c:forEach var="dto" items="${list}">
 		<div class="visit_box">
-			<div class="type_content"><pre>${dto.content}</pre></div>
+			<div class="type_content"><pre>${dto.content}</pre>
+			<c:if test = "${dto.filename ne 'no_file' }">
+				<img src = "resources/upload/${dto.filename }"><br>
+			</c:if>
+			</div>
 			<div class="type_name">작성자 : ${dto.name}(${dto.ip})</div>
-			<div class="type_regdate">작성일 ${dto.regdate }</div>
+			<div class="type_regdate">작성일 ${dto.regdate }</div>			
 			<div>	
 			
 		<form>

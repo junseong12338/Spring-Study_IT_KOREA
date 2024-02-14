@@ -22,7 +22,7 @@
 </script>
 </head>
 <body>
-<form>
+<form enctype="multipart/form-data">
 		<table border="1" align="center">
 			<caption>::새글 작성하기::</caption>
 			
@@ -41,6 +41,10 @@
 				<th>비밀번호</th>
 				<td><input name="pwd" type="password"></td>
 			</tr>
+			
+		<tr> 
+			<th>파일 첨부</th>
+				<td><input type="file" name ="photo"></td>
 			<tr>
 				<td colspan="2" align="center">
 				<input type="button" value="등록하기" onclick="send(this.form);">
