@@ -5,7 +5,7 @@ public class Common {
 	//일반 게시판용
 	
 	public static class Board{
-		public final static String VIEW_PATH = "/WEB-INF/views/board/";
+		public final static String VIEW_PATH = "/WEB-INF/views/";
 		//한페이지에 보여줄 게시물 개수
 		public final static int BLOCKLIST = 10;
 		//페이지 메뉴 수
