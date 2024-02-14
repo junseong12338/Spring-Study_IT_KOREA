@@ -24,10 +24,15 @@ public class ServletContext implements WebMvcConfigurer {
 		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
 	}
 	
+//	@Bean
+//	public VisitJsonController visitJsonController(VisitDAO visit_dao) {
+//		return new VisitJsonController(visit_dao);
+//	}
+	
+	
 	@Bean
 	public VisitController visitController(VisitDAO visit_dao) {
 		return new VisitController(visit_dao);
 	}
-	
 
 }

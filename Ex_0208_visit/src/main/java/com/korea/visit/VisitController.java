@@ -82,7 +82,7 @@ public static final String VIEW_PATH = "/WEB-INF/views/visit/";
 		
 		}
 		
-		request.setAttribute("dto", dto);
+	
 		dto.setFilename(filename); //dto.getPhoto();로 얻어온 파일정보에서 파일이름을 뽑아서 넣어주자
 		int res = visit_dao.insert(dto);
 		 

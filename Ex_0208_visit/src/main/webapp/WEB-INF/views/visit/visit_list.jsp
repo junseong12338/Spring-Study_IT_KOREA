@@ -61,12 +61,35 @@
 		f.method = "post";
 		f.submit();
 	}
+	
+	
+	function apiList(){
+		let url = "http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=f5eef3421c602c6cb7ea224104795888&targetDt=20120101";
+		let param = "";
+		
+		sendRequest(url,param,resultApi,"GET");
+		
+	}
+	
+	function resultApi(){
+		if(xhr.readyState == 4 && xhr.status== 200){
+			let data = xhr.responseText;
+			let json = (new Function('return'+data))();
+			let res = json.boxOfficeResult.dailyBoxOfficeList[0].movieNm;
+
+			let api = document.getElementById("api");
+			api.value = res;
+		}
+	}
+	
 </script>
 
 </head>
 <body>
 	<div id="main_box">
 		<h1>방명록 리스트</h1>	
+		<input id = "api">
+		<input type="button" value="API" onclick="apiList()">
 		<input type="button" value="글쓰기" onclick="location.href='insert_form'">
 	</div>
 	
