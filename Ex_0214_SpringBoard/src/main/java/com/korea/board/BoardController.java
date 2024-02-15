@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,47 +12,131 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import dao.BoardDAO;
 import dto.BoardDTO;
 import lombok.RequiredArgsConstructor;
+import service.BoardService;
 import util.Common;
 import util.Page;
 
 @Controller
 @RequiredArgsConstructor
 public class BoardController {
-	
-	final BoardDAO boardDAO;
-	
+
+	final BoardService boardService;
+
 	@Autowired
 	HttpServletRequest request;
-	
-	@RequestMapping(value = {"/","board_list"})
+
+	@RequestMapping(value = { "/", "board_list" })
 	public String list(Model model, @RequestParam(required = false, defaultValue = "1") int page) {
 
-		int start = (page-1) * Common.Board.BLOCKLIST + 1;
+		int start = (page - 1) * Common.Board.BLOCKLIST + 1;
 		int end = start + Common.Board.BLOCKLIST - 1;
 
-		HashMap<String, Integer> map = new HashMap<String, Integer>();
-		map.put("start",start);
-		map.put("end",end);
-		
-		//페이지 번호에 따른 전체 게시글 조회
-		List<BoardDTO> list = boardDAO.selectList(map);
-		
-		
-		// 전체 게시물 수 조회
-		int rowTotal = boardDAO.getRowTotal();
-		//페이지 메뉴 생성하기
-		String pageMenu = Page.getPaging("board_list",page,rowTotal,Common.Board.BLOCKLIST,Common.Board.BLOCKPAGE);
-		
-		// 새로고침 조회수 증가 방지 세션사용
+		HashMap<String, Integer> map = new HashMap<>();
+
+		map.put("start", start);
+		map.put("end", end);
+
+		HashMap<String, Object> selectMap = boardService.selectList(map);
+
+		int rowTotal = (int) selectMap.get("rowTotal");
+		List<BoardDTO> list = (List<BoardDTO>) selectMap.get("list");
+
+		// 페이지 메뉴 생성하기
+		String pageMenu = Page.getPaging("board_list", page, rowTotal, Common.Board.BLOCKLIST, Common.Board.BLOCKPAGE);
+
+		// 새로고침 마구 클릭하여 조회수가 증가하지 못하도록 세션 사용하기
 		request.getSession().removeAttribute("show");
-		model.addAttribute("list",list);
-		model.addAttribute("pageMenu",pageMenu);
-		
-		return Common.Board.VIEW_PATH+"board_list.jsp?page="+page;
+
+		model.addAttribute("list", list);
+		model.addAttribute("pageMenu", pageMenu);
+
+		return Common.Board.VIEW_PATH + "board_list.jsp?page=" + page;
 	}
-	
-	
+
+	// 게시글 상세보기
+	@RequestMapping("view")
+	public String view(Model model, int idx, int page) {
+
+		// 게시글 한건에 대한 조회
+		BoardDTO dto = boardService.selectOne(idx);
+
+		// 조회수 증가
+		HttpSession session = request.getSession();
+		String show = (String) session.getAttribute("show");// 없으면 null
+		if (show == null) {
+			int res = boardService.update_readhit(idx);
+			session.setAttribute("show", "0");
+		}
+
+		// 상세보기 페이지로 전환하기 위한 바인딩과 포워딩
+		model.addAttribute("dto", dto);
+		return Common.Board.VIEW_PATH + "board_view.jsp?page=" + page;
+	}
+
+	@RequestMapping("insert_form")
+	public String insert_form() {
+		return Common.Board.VIEW_PATH + "insert_form.jsp";
+	}
+
+	@RequestMapping("insert")
+	public String insert(BoardDTO dto) {
+		
+		String ip = request.getRemoteAddr();
+		dto.setIp(ip);
+		int res = boardService.insert(dto);
+		
+		if (res > 0) return "redirect:board_list";
+		return null;
+
+	}
+
+	// 답변 등록
+	@RequestMapping("reply_from")
+	public String reply_from(int idx, int page) {
+		return Common.Board.VIEW_PATH + "reply_from.jsp?idx=" + idx + "&page=" + page;
+	}
+
+	@RequestMapping("reply")
+	public String reply(BoardDTO dto, int idx, int page) {
+		String ip = request.getRemoteAddr();
+
+		// 같은 레퍼런스를 가지고 있는 데이터들 중에서 지금 내가 추가하려고 하는
+		// step값 이상인 애들을 +1을 해놔야 하기 때문에 insert를 먼저하지 않는다.
+
+		// 기준글의 idx를 이용해서 댓글을 달고싶은 게시글의 정보를 가져온다.
+
+		BoardDTO base_dto = boardService.selectOne(idx);
+
+		// 기준글에 step이상 값은 step = step + 1 처리
+		int res = boardService.update_step(base_dto); // -> dao에 만들러 가기
+
+		dto.setIp(ip);
+
+		// 댓글이 들어갈 위치 선정
+		dto.setRef(base_dto.getRef());
+		dto.setStep(base_dto.getStep() + 1);
+		dto.setDepth(base_dto.getDepth() + 1);
+
+		res = boardService.reply(dto);
+
+		if (res > 0) return "redirect:board_list?page=" + page;
+		
+
+		return null;
+	}
+
+	// 게시글 삭제
+	@RequestMapping("del")
+	public String del(int idx) {
+		// 게시글 한건에 대한 조회
+		BoardDTO dto = boardService.selectOne(idx);
+		int res = boardService.del(idx);
+
+		if (res > 0) return "redirect:board_list";
+		return null;
+		
+	}
+
 }

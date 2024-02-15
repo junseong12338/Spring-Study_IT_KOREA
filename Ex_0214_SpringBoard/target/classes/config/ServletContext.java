@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.korea.board.BoardController;
 
-import dao.BoardDAO;
+import service.BoardService;
 
 
 @Configuration
@@ -23,8 +23,9 @@ public class ServletContext implements WebMvcConfigurer {
 	}
 	
 	@Bean
-	public BoardController boardController(BoardDAO boardDAO) {
-		return new BoardController(boardDAO);
+	public BoardController boardController(BoardService boardService) {
+		return new BoardController(boardService);
 	}
+	
 
 }

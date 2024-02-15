@@ -77,7 +77,7 @@
 		</tr>
 		<tr>
 			<td colspan="5" align="right">
-				<img src="resources/img/btn_reg.gif" onclick="location.href='insert_form.jsp'">
+				<img src="resources/img/btn_reg.gif" onclick="location.href='insert_form'">
 			</td>
 		</tr>
 	</table>

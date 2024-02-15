@@ -11,6 +11,7 @@ public class BoardDTO {
 	private int depth; //댓글 깊이
 	private int del_info; //삭제여부
 	
+	/// 
 	private String name; //작성자
 	private String subject; //제목
 	private String content; //내용

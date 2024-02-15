@@ -16,8 +16,8 @@ public class Context_2_dao {
 		return new BoardDAO(sqlSession);
 	}
 	
-//	@Bean
-//	public BoardService boardService(BoardDAO boardDAO) {
-//		return new BoardService();
-//	}
+	@Bean
+	public BoardService boardService(BoardDAO boardDAO) {
+		return new BoardService(boardDAO);
+	}
 }
