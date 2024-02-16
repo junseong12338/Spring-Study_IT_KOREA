@@ -4,14 +4,16 @@ import java.util.HashMap;
 import java.util.List;
 
 import dao.BoardDAO;
+import dao.MemberDAO;
 import dto.BoardDTO;
+import dto.MemberDTO;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class BoardService {
 
 	final BoardDAO boardDAO;
-	
+	final MemberDAO memberDAO;
 	//페이지별 게시글 조회
 	public HashMap<String, Object> selectList( HashMap<String, Integer> map){
 		
@@ -57,6 +59,11 @@ public class BoardService {
 
 	public int reply(BoardDTO dto) {
 		return boardDAO.reply(dto);
+	}
+
+
+	public MemberDTO loginCheck(String id) {
+		return memberDAO.loginCheck(id);
 	}
 	
 

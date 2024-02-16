@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 
 import dto.BoardDTO;
+import dto.MemberDTO;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -56,4 +57,6 @@ public class BoardDAO {
 	public int del(int idx) {
 		return sqlSession.delete("b.board_delete",idx);
 	}
+
+
 }

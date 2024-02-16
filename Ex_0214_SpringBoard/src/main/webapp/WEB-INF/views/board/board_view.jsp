@@ -11,7 +11,7 @@
 <script>
 	function reply(){
 	
-		location.href="reply_from?idx=${dto.idx}&page=${param.page}";
+		location.href="reply_form?idx=${dto.idx}&page=${param.page}";
  }
 	
 	function del(){

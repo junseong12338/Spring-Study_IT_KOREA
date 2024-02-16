@@ -11,8 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import dto.BoardDTO;
+import dto.MemberDTO;
 import lombok.RequiredArgsConstructor;
 import service.BoardService;
 import util.Common;
@@ -26,6 +28,9 @@ public class BoardController {
 
 	@Autowired
 	HttpServletRequest request;
+	
+	@Autowired
+	HttpSession session;
 
 	@RequestMapping(value = { "/", "board_list" })
 	public String list(Model model, @RequestParam(required = false, defaultValue = "1") int page) {
@@ -77,6 +82,9 @@ public class BoardController {
 
 	@RequestMapping("insert_form")
 	public String insert_form() {
+		MemberDTO show = (MemberDTO)session.getAttribute("id");
+		if(show == null) return Common.Member.VIEW_PATH + "login_form.jsp";
+		
 		return Common.Board.VIEW_PATH + "insert_form.jsp";
 	}
 
@@ -93,9 +101,9 @@ public class BoardController {
 	}
 
 	// 답변 등록
-	@RequestMapping("reply_from")
+	@RequestMapping("reply_form")
 	public String reply_from(int idx, int page) {
-		return Common.Board.VIEW_PATH + "reply_from.jsp?idx=" + idx + "&page=" + page;
+		return Common.Board.VIEW_PATH + "reply_form.jsp?idx=" + idx + "&page=" + page;
 	}
 
 	@RequestMapping("reply")
@@ -123,7 +131,6 @@ public class BoardController {
 
 		if (res > 0) return "redirect:board_list?page=" + page;
 		
-
 		return null;
 	}
 
@@ -138,5 +145,39 @@ public class BoardController {
 		return null;
 		
 	}
+	
+	// 로그인
+	@RequestMapping("login")
+	@ResponseBody
+	public String login(String id, String pwd) {
+		MemberDTO dto = boardService.loginCheck(id);
+		
+		// dto가 null 일경우 아이디가 없다는 뜻
+		if(dto == null) return "[{'param':'no_id'}]";
+		
+		if(!dto.getPwd().equals(pwd)) return "[{'param':'no_pwd'}]";
+		
+		// 아이디와 비밀번호 체크에 문제가 없다면 세션에 바인딩한다.
+		// 세션은 서버의 메모리를 사용하기 때문에 많이 사용할 수록 성능 저하.
+		// 필요한 경우에서만 사용하자.
+		session.setMaxInactiveInterval(3600);
+		session.setAttribute("id", dto);
+		return "[{'param':'clear'}]";
+	}
+	
+	@RequestMapping("login_form")
+	public String login_form() {
+		return Common.Member.VIEW_PATH + "login_form.jsp";
+
+	}
+	
+	// 로그아웃
+	@RequestMapping("logout")
+	public String logout() {
+		session.removeAttribute("id");
+		return "redirect:board_list";
+
+	}
+	
 
 }

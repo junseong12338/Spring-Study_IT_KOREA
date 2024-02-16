@@ -14,16 +14,16 @@
 </head>
 <body>
 	<form action ="insert" name = "f" method ="post">
-		<table border="1"  align="center">
-		<caption>:::새 글 쓰기:::</caption>
-
+	<input name="name" type="hidden" value='${id.name}'/>
+		<table border="1" align="center">
+		<caption>:::새글 쓰기:::</caption>
 		<tr>
 			<th>제목</th>
 			<td><input name="subject" style="width:370px;"></td>
 		</tr>
 		<tr>
 			<th>작성자</th>
-			<td><input name="name" style="width:370px;"></td>
+			<td>${id.name}</td>
 		</tr>
 		<tr>
 			<th>내용</th><!-- 가로로 50글자 세로로 엔터 10번정도 칠수 있는 크기 -->
