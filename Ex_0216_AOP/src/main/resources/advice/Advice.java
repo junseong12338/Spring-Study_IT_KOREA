@@ -1,6 +1,9 @@
 package advice;
 
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 
 @Aspect
@@ -15,5 +18,21 @@ public class Advice {
 	
 	@Pointcut("execution(* dao.*DAO.*(..))")
 	public void myPoint() {}
+	
+	@Before("myPoint()")
+	public void before(JoinPoint jp) {
+		//getSignature() : 현재 JoinPoint에서 실행되는 메서드의 서명(Signature)정보를 반환한다.
+				//서명 정보에는 메서드명, 리턴 타입, 파라미터 타입등이 포함된다.
+				//.getName() : 메서드명
+				//.getReturnType() : 리턴타입
+				//.getParameterTypes() : 파라미터 타입들
+		System.out.println("----before:"+jp.getSignature());
+		
+	}
+	@After("myPoint()") //- After Advice: Exception 발생 여부에 상관없이 대상 객체의 Method 실행 후 공통 기능을 실행
+	public void after(JoinPoint jp) {
+		//toLongString 호출하는 메서드의 모든 정보(리턴,이름,매게변수), 경로를 포함하여 반환
+		System.out.println("---after:"+jp.toLongString());
+	}
 
 }
