@@ -62,9 +62,14 @@ public class BoardService {
 	}
 
 
-	public MemberDTO loginCheck(String id) {
+	public MemberDTO check_id(String id) {
 		return memberDAO.loginCheck(id);
 	}
+	
+	public int Member_insert(MemberDTO dto) {
+		return memberDAO.member_insert(dto);
+	}
+	
 	
 
 

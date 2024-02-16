@@ -14,4 +14,13 @@ public class MemberDAO {
 		
 		return sqlSession.selectOne("m.loginCheck",id);
 	}
+
+	public int member_insert(MemberDTO dto) {
+		
+		
+		return sqlSession.insert("m.insert",dto);
+	}
+	
+	
+
 }

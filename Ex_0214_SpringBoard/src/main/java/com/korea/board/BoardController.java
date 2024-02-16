@@ -28,7 +28,7 @@ public class BoardController {
 
 	@Autowired
 	HttpServletRequest request;
-	
+
 	@Autowired
 	HttpSession session;
 
@@ -82,20 +82,22 @@ public class BoardController {
 
 	@RequestMapping("insert_form")
 	public String insert_form() {
-		MemberDTO show = (MemberDTO)session.getAttribute("id");
-		if(show == null) return Common.Member.VIEW_PATH + "login_form.jsp";
-		
+		MemberDTO show = (MemberDTO) session.getAttribute("id");
+		if (show == null)
+			return Common.Member.VIEW_PATH + "login_form.jsp";
+
 		return Common.Board.VIEW_PATH + "insert_form.jsp";
 	}
 
 	@RequestMapping("insert")
 	public String insert(BoardDTO dto) {
-		
+
 		String ip = request.getRemoteAddr();
 		dto.setIp(ip);
 		int res = boardService.insert(dto);
-		
-		if (res > 0) return "redirect:board_list";
+
+		if (res > 0)
+			return "redirect:board_list";
 		return null;
 
 	}
@@ -129,8 +131,9 @@ public class BoardController {
 
 		res = boardService.reply(dto);
 
-		if (res > 0) return "redirect:board_list?page=" + page;
-		
+		if (res > 0)
+			return "redirect:board_list?page=" + page;
+
 		return null;
 	}
 
@@ -141,22 +144,25 @@ public class BoardController {
 		BoardDTO dto = boardService.selectOne(idx);
 		int res = boardService.del(idx);
 
-		if (res > 0) return "redirect:board_list";
+		if (res > 0)
+			return "redirect:board_list";
 		return null;
-		
+
 	}
-	
+
 	// 로그인
 	@RequestMapping("login")
 	@ResponseBody
 	public String login(String id, String pwd) {
-		MemberDTO dto = boardService.loginCheck(id);
-		
+		MemberDTO dto = boardService.check_id(id);
+
 		// dto가 null 일경우 아이디가 없다는 뜻
-		if(dto == null) return "[{'param':'no_id'}]";
-		
-		if(!dto.getPwd().equals(pwd)) return "[{'param':'no_pwd'}]";
-		
+		if (dto == null)
+			return "[{'param':'no_id'}]";
+
+		if (!dto.getPwd().equals(pwd))
+			return "[{'param':'no_pwd'}]";
+
 		// 아이디와 비밀번호 체크에 문제가 없다면 세션에 바인딩한다.
 		// 세션은 서버의 메모리를 사용하기 때문에 많이 사용할 수록 성능 저하.
 		// 필요한 경우에서만 사용하자.
@@ -164,20 +170,46 @@ public class BoardController {
 		session.setAttribute("id", dto);
 		return "[{'param':'clear'}]";
 	}
-	
+
 	@RequestMapping("login_form")
 	public String login_form() {
 		return Common.Member.VIEW_PATH + "login_form.jsp";
 
 	}
-	
+
 	// 로그아웃
 	@RequestMapping("logout")
 	public String logout() {
 		session.removeAttribute("id");
-		return "redirect:board_list";
 
+		return "redirect:board_list";
+	}
+
+	// 회원 가입 아이디 중복 처리
+	@RequestMapping("check_id")
+	@ResponseBody
+	public String check_id(String id) {
+		MemberDTO dto = boardService.check_id(id);
+
+		// dto가 null 일경우 아이디가 없다는 뜻
+		if (dto == null)
+			return "[{'res':'yes'}]";
+
+		return "[{'res':'no'}]";
 	}
 	
+	@RequestMapping("member_insert_form")
+	public String member_insert_form() {
+		return Common.Member.VIEW_PATH + "member_insert_form.jsp";
+	}
+	
+	@RequestMapping("member_insert")
+	public String member_insert(MemberDTO dto) {
+		int res = boardService.Member_insert(dto);
+		if (res > 0)return "redirect:board_list";
+		
+		return null;
+
+	}
 
 }

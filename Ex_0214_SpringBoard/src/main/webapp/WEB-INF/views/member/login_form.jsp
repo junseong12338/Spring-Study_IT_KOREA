@@ -32,8 +32,8 @@
 	//콜백메서드
 function myCheck(){
 	if(xhr.readyState == 4 && xhr.status == 200){
-		var data = xhr.responseText;
-		var json = eval(data);
+		let data = xhr.responseText;
+		let json = eval(data);
 
 		if(json[0].param == 'no_id'){
 			alert("아이디가 존재하지 않습니다.");
@@ -41,7 +41,7 @@ function myCheck(){
 			alert("비밀번호가 맞지 않습니다.");
 		}else {
 			alert("로그인 성공");
-			location.href="board_list.do";
+			location.href="board_list";
 
 		}
 	}
