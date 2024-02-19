@@ -29,9 +29,11 @@ public class Advice {
 		System.out.println("----before:"+jp.getSignature());
 		
 	}
+	// 이후 타겟 메서드 실행
 	@After("myPoint()") //- After Advice: Exception 발생 여부에 상관없이 대상 객체의 Method 실행 후 공통 기능을 실행
 	public void after(JoinPoint jp) {
 		//toLongString 호출하는 메서드의 모든 정보(리턴,이름,매게변수), 경로를 포함하여 반환
+		
 		System.out.println("---after:"+jp.toLongString());
 	}
 
